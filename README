@@ -1,0 +1,48 @@
+AGILE Sciente Tools and IRF build and run environment
+
+We need 3 environment variables to compile the core of the AGILE Science Tool:
+
+export CFITSIO=<path>
+export ROOTSYS=<path>
+export AGILE=<path>
+
+The following variable are needed to run the code of the AGILE Science Tools
+
+export PFILES=$AGILE/share:$PFILES
+export LD_LIBRARY_PATH=$AGILE/lib:$LD_LIBRARY_PATH
+export PATH=$AGILE/bin:$AGILE/scripts:$PATH
+
+To install the system:
+
+git clone https://github.com/AGILESCIENCE/AGILE-GRID-ScienceTools-Setup.git
+cd AGILE-GRID-ScienceTools-Setup
+git checkout <TAGNAME>
+./downloadScienceTools.sh <username>
+./installScienceTools.sh
+./downloadIRF.sh <username>
+./installIRF.sh
+
+e.g. TAGNAME = BUILD25
+
+To recompile the code
+./installScienceTools.sh
+
+To install agextspot-v2 the OPENCV variabel must be set.
+To install WTOOLS the GSL variable must be set.
+
+A possibile module file could be
+----
+#%Module
+
+module load root_v5.34.24
+module load cfitsio-3.370
+module load opencv-2.4.13
+
+set path /opt/prod/agile-B25-r5/
+setenv AGILE                 $path
+prepend-path LD_LIBRARY_PATH /usr/lib:/usr/lib64:$path/lib
+prepend-path PATH            $path/bin:$path/scripts
+prepend-path --delim ";"     PFILES ".;$path/share"
+
+setenv GSL                   /opt/prod/gsl-1.15/
+----
